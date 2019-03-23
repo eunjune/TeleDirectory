@@ -1,14 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "list.h"
 
 
 int main(void)
 {
 	int num;
-	USERDATA *newNode, *root = NULL, *searchNode;
+	USERDATA *newNode, *root, *searchNode;
 	char name[32], trash;
+	
+	if (!getData(&root)) {
+		root = NULL;
+	}
 
 	printf("[1]Add\t[2]Search\t[3]Print all\t[4]Remove\t[0]Exit\n:");
 	while (1)
@@ -64,7 +65,14 @@ int main(void)
 				}
 				break;
 			case 0:
-				return 0;
+				if (saveData(root))
+				{
+					return 0;
+				}
+				else
+				{
+					printf("저장오류\n:");
+				}
 			default:
 				printf("해당하는 메뉴가 존재하지 않음\n:");
 				break;

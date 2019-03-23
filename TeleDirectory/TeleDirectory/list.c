@@ -1,7 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "list.h"
+
 
 USERDATA* search(USERDATA *head, char *name)
 {
@@ -41,12 +39,14 @@ int addNode(USERDATA **head, USERDATA *node)
 		while (curNode->pNext != NULL)
 		{
 			curNode = curNode->pNext;
+
 		}
 
 		curNode->pNext = node;
 	}
 
 	return 1;
+
 }
 
 
@@ -86,6 +86,7 @@ int removeNode(USERDATA **head, char *name)
 			{
 				preNode->pNext = curNode->pNext;
 			}
+
 			free(curNode);
 			return 1;
 		}
