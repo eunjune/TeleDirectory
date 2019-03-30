@@ -1,3 +1,4 @@
+
 #pragma once
 
 class List;
@@ -5,7 +6,7 @@ class List;
 class UserInterface
 {
 public:
-	UserInterface();
+	UserInterface(List &list);
 	~UserInterface();
 
 protected:
