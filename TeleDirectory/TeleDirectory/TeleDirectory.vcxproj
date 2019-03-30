@@ -19,20 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="file.c" />
-    <ClCompile Include="list.c" />
-    <ClCompile Include="main.c" />
+    <ClCompile Include="List.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="String.cpp" />
     <ClCompile Include="StringEx.cpp" />
-    <ClCompile Include="ui.c" />
+    <ClCompile Include="UserData.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="file.h" />
-    <ClInclude Include="list.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="StringEx.h" />
-    <ClInclude Include="ui.h" />
+    <ClInclude Include="UserData.h" />
+    <ClInclude Include="UserInterface.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
