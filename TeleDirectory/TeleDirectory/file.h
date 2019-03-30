@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "pch.h"
 
 #pragma once
 
@@ -12,5 +10,5 @@ typedef struct USERDATA
 	struct USERDATA *pNext;
 } USERDATA;
 
-int getData(USERDATA **head);
+int loadData(USERDATA **head);
 int saveData(USERDATA* head);

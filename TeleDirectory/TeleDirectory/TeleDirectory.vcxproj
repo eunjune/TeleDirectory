@@ -22,10 +22,17 @@
     <ClCompile Include="file.c" />
     <ClCompile Include="list.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="String.cpp" />
+    <ClCompile Include="StringEx.cpp" />
+    <ClCompile Include="ui.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file.h" />
     <ClInclude Include="list.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="String.h" />
+    <ClInclude Include="StringEx.h" />
+    <ClInclude Include="ui.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

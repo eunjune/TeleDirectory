@@ -1,5 +1,5 @@
 #include "list.h"
-
+#include "file.h"
 
 USERDATA* search(USERDATA *head, char *name)
 {
@@ -51,22 +51,7 @@ int addNode(USERDATA **head, USERDATA *node)
 
 
 
-void printAll(USERDATA *head)
-{
-	USERDATA *curNode = head;
 
-	if (curNode == NULL)
-	{
-		printf("¾øÀ½.\n");
-		return;
-	}
-
-	while (curNode != NULL)
-	{
-		printf("[%p] %s\t%s [%p]\n", curNode, curNode->szName, curNode->szPhone, curNode->pNext);
-		curNode = curNode->pNext;
-	}
-}
 
 int removeNode(USERDATA **head, char *name)
 {
@@ -95,4 +80,19 @@ int removeNode(USERDATA **head, char *name)
 	}
 
 	return 0;
+}
+
+void releaseList(USERDATA **head)
+{
+	USERDATA *curNode = *head;
+	USERDATA *deleteNode = NULL;
+
+	while (curNode != NULL)
+	{
+		deleteNode = curNode;
+		curNode = curNode->pNext;
+		free(deleteNode);
+	}
+
+	*head = NULL;
 }
