@@ -6,17 +6,18 @@ class List;
 class UserInterface
 {
 public:
-	UserInterface(List &list);
+	UserInterface(List &rList);
 	~UserInterface();
 
 protected:
-	List& list;
+	List& m_rList;
 
 public:
 	void printAdd();
 	void printSearch();
 	void printRemove();
 	int printUI();
+	void printAll();
 	int run();
 };
 

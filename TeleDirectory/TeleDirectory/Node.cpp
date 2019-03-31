@@ -3,7 +3,7 @@
 
 
 Node::Node()
-	:next(nullptr)
+	:m_pNext(nullptr)
 {
 }
 

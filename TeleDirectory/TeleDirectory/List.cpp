@@ -2,6 +2,13 @@
 #include "UserData.h"
 #include "pch.h"
 
+typedef struct USERDATA
+{
+	char szName[32];
+	char szPhone[32];
+
+} USERDATA;
+
 List::List(Node * pHead)
 {
 	m_pHead = pHead;
@@ -17,9 +24,12 @@ List::List(Node * pHead)
 				왜냐하면 가상함수 테이블 주소도 파일로 저장되는데 다시 컴파일하면
 				함수 위치 주소도 다시 바뀌기 땜에 이전에 썼던 주소를 받아와도 함수 인식을 못함.
 			*/
-			UserData *data = new UserData;
-			fin.read(reinterpret_cast<char*>(data), sizeof(UserData));
-			data->next = nullptr;
+			USERDATA buffer;
+
+			fin.read(reinterpret_cast<char*>(&buffer), sizeof(USERDATA));
+			
+			UserData *data = new UserData(buffer.szName, buffer.szPhone);
+			data->m_pNext = nullptr;
 			if (fin && !addNode(data))
 			{
 				cout << "파일 읽기 오류" << endl;
@@ -33,14 +43,17 @@ List::List(Node * pHead)
 List::~List()
 {
 	ofstream fout("list.dat",ios_base::out | ios_base::binary);
-	UserData *curNode = static_cast<UserData*>(m_pHead->next);
+	UserData *curNode = static_cast<UserData*>(m_pHead->m_pNext);
 
 	if (fout.is_open())
 	{
 		while (curNode != nullptr)
 		{
-			fout.write(reinterpret_cast<char*>(curNode), sizeof(UserData));
-			curNode = static_cast<UserData*>(curNode->next);
+			USERDATA buffer;
+			strcpy_s(buffer.szName, curNode->getName()->GetLength()+1,curNode->getNameStr());
+			strcpy_s(buffer.szPhone, curNode->getName()->GetLength()+1,curNode->getPhoneStr());
+			fout.write(reinterpret_cast<char*>(&buffer), sizeof(USERDATA));
+			curNode = static_cast<UserData*>(curNode->m_pNext);
 		}
 	}
 
@@ -50,22 +63,22 @@ List::~List()
 
 void List::releaseList()
 {
-	Node *curNode = m_pHead->next;
+	Node *curNode = m_pHead->m_pNext;
 	Node *deleteNode = nullptr;
 
 	while (curNode != nullptr)
 	{
 		deleteNode = curNode;
-		curNode = curNode->next;
+		curNode = curNode->m_pNext;
 		delete deleteNode;
 	}
-	m_pHead->next = nullptr;
+	m_pHead->m_pNext = nullptr;
 }
 
 
 Node* List::searchNode(const char* pszKey)
 {
-	Node *curNode = m_pHead->next;
+	Node *curNode = m_pHead->m_pNext;
 
 	while (curNode != nullptr)
 	{
@@ -73,7 +86,7 @@ Node* List::searchNode(const char* pszKey)
 		{
 			return curNode;
 		}
-		curNode = curNode->next;
+		curNode = curNode->m_pNext;
 	}
 
 	return nullptr;
@@ -90,48 +103,50 @@ int List::addNode(Node *pNode)
 		return 0;
 	}
 
-	pNode->next = m_pHead->next;
-	m_pHead -> next = pNode;
+	if (OnAddNewNode(pNode))
+	{
+		pNode->m_pNext = m_pHead->m_pNext;
+		m_pHead -> m_pNext = pNode;
+	}
 
 	return 1;
 }
 
 
-void List::printAll()
-{
-	Node *curNode = m_pHead->next;
 
-	if (curNode == NULL)
-	{
-		printf("없음.");
-		return;
-	}
-
-	while (curNode != NULL)
-	{
-		curNode->printNode();
-		curNode = curNode->next;
-	}
-
-}
 
 
 int List::removeNode(const char* pszKey)
 {
 	Node *preNode = m_pHead;
-	Node *curNode = m_pHead->next;
+	Node *curNode = m_pHead->m_pNext;
 
 	while (curNode != nullptr)
 	{
 		if (strcmp(curNode->getKey(), pszKey) == 0)
 		{
-			preNode->next = curNode->next;
+			preNode->m_pNext = curNode->m_pNext;
 
 			delete curNode;
 			return 1;
 		}
 		preNode = curNode;
-		curNode = curNode->next;
+		curNode = curNode->m_pNext;
 	}
 	return 0;
+}
+
+
+Iterator List::makeIterator()
+{
+	Iterator it;
+	it.m_pCurrent = m_pHead->m_pNext;
+	it.m_pCurrent = m_pHead->m_pNext;
+
+	return it;
+}
+
+int List::OnAddNewNode(Node *pNode)
+{
+	return 1;
 }

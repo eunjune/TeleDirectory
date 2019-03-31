@@ -5,7 +5,7 @@
 
 
 UserInterface::UserInterface(List &rList)
-	:list(rList)
+	:m_rList(rList)
 {
 	
 
@@ -28,7 +28,7 @@ void UserInterface::printAdd()
 	cout << "Input phone number : ";
 	gets_s(phone, sizeof(phone));
 
-	if (list.addNode(new UserData(name, phone)))
+	if (m_rList.addNode(new UserData(name, phone)))
 	{
 		cout << "입력완료";
 	}
@@ -47,7 +47,7 @@ void UserInterface::printSearch()
 	cin.ignore();
 	cout << "Input name : ";
 	gets_s(name, sizeof(name));
-	searchNode = list.searchNode(name);
+	searchNode = m_rList.searchNode(name);
 	if (searchNode == nullptr) {
 		cout << "존재하지 않는 이름입니다.";
 	}
@@ -65,7 +65,7 @@ void UserInterface::printRemove()
 	cin.ignore();
 	cout << "Input name : ";
 	gets_s(name, sizeof(name));
-	if (list.removeNode(name))
+	if (m_rList.removeNode(name))
 	{
 		cout<< "삭제완료";
 	}
@@ -100,6 +100,19 @@ int UserInterface::printUI()
 	return num;
 }
 
+void UserInterface::printAll()
+{
+	Iterator it = m_rList.makeIterator();
+	UserData *pNode = nullptr;
+
+	while ((pNode = static_cast<UserData*>(it.getCurrent())) != nullptr)
+	{
+		pNode->printNode();
+		it.moveNext();
+	}
+
+
+}
 
 int UserInterface::run()
 {
@@ -118,7 +131,7 @@ int UserInterface::run()
 			printSearch();
 			break;
 		case 3:
-			list.printAll();
+			printAll();
 			break;
 		case 4:
 			printRemove();

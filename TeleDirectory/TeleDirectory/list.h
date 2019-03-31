@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Node.h"
+#include "Iterator.h"
 
 class Node;
 
@@ -19,7 +20,8 @@ public:
 	Node* searchNode(const char* pszKey);
 	int addNode(Node *pNode);
 
-	void printAll();
 	int removeNode(const char* pszKey);
+	Iterator makeIterator();
+	virtual int OnAddNewNode(Node *pNode);
 };
 

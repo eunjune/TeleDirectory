@@ -1,5 +1,6 @@
 #pragma once
 #include "Node.h"
+#include "String.h"
 
 class UserData : public Node
 {
@@ -9,13 +10,15 @@ public:
 	~UserData();
 
 protected:
-	char name[32];
-	char phone[32];
+	String *mName;
+	String *mPhone;
 
 	static int count;
 public:
-	const char* getName() const { return name; };
-	const char* getPhone() const { return phone; };
+	const char* getNameStr() const { return mName->GetString(); };
+	String* getName() const { return mName; };
+	const char* getPhoneStr() const { return mPhone->GetString(); };
+	String* getPhone() const { return mPhone; };
 
 	static int getCount() { return count; }
 

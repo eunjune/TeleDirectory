@@ -4,17 +4,14 @@
 int UserData::count = 0;
 
 UserData::UserData()
-	
 {
-	memset(name, 0, sizeof(name));
-	memset(phone, 0, sizeof(phone));
 	count++;
 }
 
 UserData::UserData(const char * pName, const char * pPhone)
 {
-	strcpy_s(name, strlen(pName) + 1, pName);
-	strcpy_s(phone, strlen(pPhone) + 1, pPhone);
+	mName = new String(pName);
+	mPhone = new String(pPhone);
 	count++;
 
 }
@@ -26,11 +23,17 @@ UserData::~UserData()
 
 const char* UserData::getKey(void)
 {
-	return name;
+	return mName->GetString();
 }
 
 void UserData::printNode(void)
 {
-	cout << "[" << this << "] " << this->getName() << "\t"
-		<< this->getPhone() << " [" << this->getNext() << "]\n";
+#ifdef _DEBUG
+	cout << "[" << this << "] " << this->getNameStr() << "\t"
+		<< this->getPhoneStr() << " [" << this->getNext() << "]"<<endl;
+#else
+	cout << this->getName().GetString() << "\t"
+		<< this->getPhone().GetString() << endl;
+#endif
+
 }
