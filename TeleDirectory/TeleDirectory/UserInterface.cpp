@@ -1,10 +1,11 @@
 #include "UserInterface.h"
 #include "List.h"
 #include "pch.h"
+#include "UserData.h"
 
 
-UserInterface::UserInterface(List &pList)
-	:list(pList)
+UserInterface::UserInterface(List &rList)
+	:list(rList)
 {
 	
 
@@ -22,39 +23,37 @@ void UserInterface::printAdd()
 	char phone[32];
 
 	cin.ignore();
-	printf("Input name : ");
+	cout << "Input name : ";
 	gets_s(name, sizeof(name));
-	printf("Input phone number : ");
+	cout << "Input phone number : ";
 	gets_s(phone, sizeof(phone));
 
-	if (list.addNode(name, phone))
+	if (list.addNode(new UserData(name, phone)))
 	{
-		printf("입력완료");
-
+		cout << "입력완료";
 	}
 	else
 	{
-		printf("중복되는 이름이 있습니다.");
+		cout << "중복되는 이름이 있습니다.";
 	}
 }
 
 
 void UserInterface::printSearch()
 {
-	UserData *searchNode;
+	Node *searchNode;
 	char name[32];
 
 	cin.ignore();
-	printf("Input name : ");
+	cout << "Input name : ";
 	gets_s(name, sizeof(name));
 	searchNode = list.searchNode(name);
 	if (searchNode == nullptr) {
-		printf("존재하지 않는 이름입니다.");
+		cout << "존재하지 않는 이름입니다.";
 	}
 	else
 	{
-		printf("[%p] %s\t%s [%p]", searchNode, searchNode->getName()
-			, searchNode->getPhone(), searchNode->getNext());
+		searchNode->printNode();
 	}
 }
 
@@ -64,15 +63,15 @@ void UserInterface::printRemove()
 	char name[32];
 
 	cin.ignore();
-	printf("Input name : ");
+	cout << "Input name : ";
 	gets_s(name, sizeof(name));
 	if (list.removeNode(name))
 	{
-		printf("삭제완료");
+		cout<< "삭제완료";
 	}
 	else
 	{
-		printf("삭제오류");
+		cout<<"삭제오류";
 	}
 }
 
@@ -88,10 +87,10 @@ int UserInterface::printUI()
 	int num;
 	string trash;
 
-	printf("\n:");
+	cout << "\n:";
 	cin >> num;
 	
-	if ((num < 1 || num > 4))
+	if ((num < 0 || num > 4) || cin.fail())
 	{
 		cin.clear();
 		cin.ignore(LLONG_MAX, '\n');
@@ -125,7 +124,7 @@ int UserInterface::run()
 			printRemove();
 			break;
 		default:
-			printf("해당하는 메뉴가 존재하지 않음");
+			cout << "해당하는 메뉴가 존재하지 않음";
 			break;
 		}
 

@@ -1,22 +1,25 @@
 #pragma once
-class UserData
+#include "Node.h"
+
+class UserData : public Node
 {
-	friend class List;
 public:
 	UserData();
+	UserData(const char* pName, const char* pPhone);
 	~UserData();
 
 protected:
 	char name[32];
 	char phone[32];
-	UserData* next;
 
 	static int count;
 public:
 	const char* getName() const { return name; };
 	const char* getPhone() const { return phone; };
-	const UserData* getNext() const { return next; };
 
 	static int getCount() { return count; }
+
+	virtual const char* getKey(void);
+	virtual void printNode(void);
 };
 

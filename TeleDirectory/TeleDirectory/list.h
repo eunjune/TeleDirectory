@@ -1,23 +1,25 @@
 #pragma once
 
-#include "UserData.h"
+#include "Node.h"
+
+class Node;
 
 class List
 {
 public:
-	List();
+	List(Node *pHead);
 	~List();
 
 
 protected:
 	void releaseList();
-	UserData head;
+	Node *m_pHead;
 
 public:
-	UserData* searchNode(const char* name);
-	int addNode(const char* name, const char* phone);
+	Node* searchNode(const char* pszKey);
+	int addNode(Node *pNode);
 
 	void printAll();
-	int removeNode(const char* name);
+	int removeNode(const char* pszKey);
 };
 

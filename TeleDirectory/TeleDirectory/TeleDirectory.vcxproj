@@ -21,14 +21,20 @@
   <ItemGroup>
     <ClCompile Include="List.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="UserData.cpp" />
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="List.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="UserData.h" />
     <ClInclude Include="UserInterface.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TeleDirectory.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

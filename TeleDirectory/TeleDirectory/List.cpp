@@ -1,19 +1,26 @@
 #include "List.h"
+#include "UserData.h"
 #include "pch.h"
 
-
-List::List()
+List::List(Node * pHead)
 {
-	ifstream fin("list.dat",ios_base::in | ios_base::binary);
-	
+	m_pHead = pHead;
+
+	ifstream fin("list.dat", ios_base::in | ios_base::binary);
+
 	if (fin.is_open())
 	{
-
 		while (!fin.eof())
 		{
-			UserData data;
-			fin.read((char*)&data, sizeof(UserData));
-			if (fin && !addNode(data.getName(), data.getPhone()))
+			/*
+				리컴파일하면 동적 바인딩이 안됨.
+				왜냐하면 가상함수 테이블 주소도 파일로 저장되는데 다시 컴파일하면
+				함수 위치 주소도 다시 바뀌기 땜에 이전에 썼던 주소를 받아와도 함수 인식을 못함.
+			*/
+			UserData *data = new UserData;
+			fin.read(reinterpret_cast<char*>(data), sizeof(UserData));
+			data->next = nullptr;
+			if (fin && !addNode(data))
 			{
 				cout << "파일 읽기 오류" << endl;
 				fin.close();
@@ -23,18 +30,17 @@ List::List()
 	fin.close();
 }
 
-
 List::~List()
 {
 	ofstream fout("list.dat",ios_base::out | ios_base::binary);
-	UserData *curNode = head.next;
+	UserData *curNode = static_cast<UserData*>(m_pHead->next);
 
 	if (fout.is_open())
 	{
 		while (curNode != nullptr)
 		{
-			fout.write((char*)curNode, sizeof(*curNode));
-			curNode = curNode->next;
+			fout.write(reinterpret_cast<char*>(curNode), sizeof(UserData));
+			curNode = static_cast<UserData*>(curNode->next);
 		}
 	}
 
@@ -44,30 +50,28 @@ List::~List()
 
 void List::releaseList()
 {
-	UserData *curNode = head.next;
-	UserData *deleteNode = nullptr;
+	Node *curNode = m_pHead->next;
+	Node *deleteNode = nullptr;
 
 	while (curNode != nullptr)
 	{
 		deleteNode = curNode;
 		curNode = curNode->next;
-		free(deleteNode);
+		delete deleteNode;
 	}
-	head.next = nullptr;
+	m_pHead->next = nullptr;
 }
 
 
-UserData* List::searchNode(const char* name)
+Node* List::searchNode(const char* pszKey)
 {
-	UserData *curNode = head.next;
+	Node *curNode = m_pHead->next;
 
 	while (curNode != nullptr)
 	{
-		if (strcmp(curNode->name, name) == 0)
+		if (strcmp(curNode->getKey(), pszKey) == 0)
 		{
-
 			return curNode;
-
 		}
 		curNode = curNode->next;
 	}
@@ -76,23 +80,18 @@ UserData* List::searchNode(const char* name)
 }
 
 
-int List::addNode(const char* name, const char* phone)
+int List::addNode(Node *pNode)
 {
-	UserData *newNode = nullptr;
 
-
-	if (searchNode(name))
+	if (searchNode(pNode->getKey()))
 	{
+		delete pNode;
+
 		return 0;
 	}
 
-	newNode = new UserData;
-
-	strcpy_s(newNode->name, strlen(name) + 1, name);
-	strcpy_s(newNode->phone, strlen(phone) + 1, phone);
-
-	newNode->next = head.next;
-	head.next = newNode;
+	pNode->next = m_pHead->next;
+	m_pHead -> next = pNode;
 
 	return 1;
 }
@@ -100,7 +99,7 @@ int List::addNode(const char* name, const char* phone)
 
 void List::printAll()
 {
-	UserData *curNode = head.next;
+	Node *curNode = m_pHead->next;
 
 	if (curNode == NULL)
 	{
@@ -110,32 +109,29 @@ void List::printAll()
 
 	while (curNode != NULL)
 	{
-		printf("[%p] %s\t%s [%p]\n", curNode, curNode->name, curNode->phone, curNode->next);
+		curNode->printNode();
 		curNode = curNode->next;
 	}
 
 }
 
 
-int List::removeNode(const char* name)
+int List::removeNode(const char* pszKey)
 {
-	UserData *preNode = &head;
-	UserData *curNode = head.next;
+	Node *preNode = m_pHead;
+	Node *curNode = m_pHead->next;
 
 	while (curNode != nullptr)
 	{
-		if (strcmp(curNode->name, name) == 0)
+		if (strcmp(curNode->getKey(), pszKey) == 0)
 		{
-			
 			preNode->next = curNode->next;
 
-			free(curNode);
+			delete curNode;
 			return 1;
 		}
 		preNode = curNode;
 		curNode = curNode->next;
 	}
-
-
 	return 0;
 }
